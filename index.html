@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>중력 | 중학교 과학 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6FB; --surface:#FFFFFF; --ink:#1D2433; --muted:#5B6578; --line:#DCE3EE;
+  --brand:#0E8A7E; --brand-soft:#E0F3F1; --brand-ink:#FFFFFF;
+  --f1:#E0413A; --f1-soft:#FDE9E8; --f2:#1F63C8; --f2-soft:#E6EEFB;
+  --net:#7B3FD6; --net-soft:#F1EAFD;
+  --ok:#1E9E62; --ok-soft:#E3F6EC; --bad:#D6453D; --bad-soft:#FCE8E7;
+  --note:#FFF6DB; --note-line:#F0D98A;
+  --grid:#D6E4F3; --grid-major:#AFC8E6; --lane:#8FA9C9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121722; --surface:#1B2230; --ink:#E8EDF6; --muted:#9AA6BA; --line:#2C3547;
+    --brand:#3CC4B4; --brand-soft:#16312F; --brand-ink:#0D1A19;
+    --f1:#FF6B63; --f1-soft:#3A1F20; --f2:#5B9BFF; --f2-soft:#1B2A45;
+    --net:#B38CFF; --net-soft:#2A2140;
+    --ok:#3ECF8E; --ok-soft:#173427; --bad:#FF7A72; --bad-soft:#3A1F20;
+    --note:#2F2A1A; --note-line:#6B5B24;
+    --grid:#243246; --grid-major:#34496A; --lane:#4E6A92;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121722; --surface:#1B2230; --ink:#E8EDF6; --muted:#9AA6BA; --line:#2C3547;
+  --brand:#3CC4B4; --brand-soft:#16312F; --brand-ink:#0D1A19;
+  --f1:#FF6B63; --f1-soft:#3A1F20; --f2:#5B9BFF; --f2-soft:#1B2A45;
+  --net:#B38CFF; --net-soft:#2A2140;
+  --ok:#3ECF8E; --ok-soft:#173427; --bad:#FF7A72; --bad-soft:#3A1F20;
+  --note:#2F2A1A; --note-line:#6B5B24;
+  --grid:#243246; --grid-major:#34496A; --lane:#4E6A92;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.7;font-size:17px;word-break:keep-all}
+h1,h2,h3,.brand,.hand{font-family:"Jua","Noto Sans KR",sans-serif;font-weight:400}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:8px}
+
+/* header */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1040px;margin:0 auto;padding:10px 18px 0}
+.brand{font-size:22px;display:flex;align-items:center;gap:8px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--bg)}
+.chips a:hover{color:var(--brand);border-color:var(--brand)}
+.chips a.hl{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+
+main{max-width:1040px;margin:0 auto;padding:18px 18px 40px}
+.crumb{font-size:14px;color:var(--muted);margin:4px 0 14px}
+
+/* hero */
+.hero{position:relative;background:linear-gradient(135deg,var(--brand-soft),var(--net-soft));border-radius:24px;padding:34px 30px;overflow:hidden;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,5vw,44px);margin:0 0 8px;line-height:1.25}
+.hero p{margin:0;max-width:34em;color:var(--muted)}
+.hero .floaters{position:absolute;right:26px;top:50%;transform:translateY(-50%);display:flex;gap:10px;font-size:42px}
+@media (max-width:720px){.hero .floaters{position:static;transform:none;margin-top:16px;font-size:34px}}
+
+/* sections */
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px 26px 24px;margin:0 0 18px}
+.eyebrow{display:inline-block;font-size:14px;font-weight:700;color:var(--brand);background:var(--brand-soft);padding:3px 10px;border-radius:999px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin:10px 0 14px}
+.sec-head h2{margin:0;font-size:clamp(22px,3.4vw,28px);line-height:1.35}
+.page{flex:none;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:2px 8px;margin-top:4px}
+p{margin:0 0 10px}
+strong{font-weight:700}
+
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px dashed var(--line)}
+.goal:first-of-type{border-top:0}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-weight:700;font-size:15px}
+
+.btn{border:0;border-radius:12px;padding:9px 16px;font-weight:700;background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.small{padding:6px 12px;font-size:14px}
+.reveal{display:none;margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--brand-soft);border-left:5px solid var(--brand)}
+.reveal.show{display:block}
+
+.think{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.think .big{font-size:56px;line-height:1}
+@media (max-width:560px){.think{grid-template-columns:1fr}}
+
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media (max-width:720px){.rule-grid{grid-template-columns:1fr}}
+.rule{border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--bg)}
+.rule h3{margin:0 0 8px;font-size:20px}
+.mini{display:block;width:100%;height:auto;margin:6px 0 10px}
+.rule dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:16px}
+.rule dt{font-weight:700;color:var(--muted)}
+.rule dd{margin:0}
+
+.tip{background:var(--note);border:1px solid var(--note-line);border-radius:14px;padding:12px 16px;font-size:15px;margin-top:14px}
+
+/* simulation */
+.modes{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
+.mode{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 16px;font-weight:700}
+.mode[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.board{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:10px}
+#sim{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.caption{font-size:13px;color:var(--muted);text-align:right;margin:4px 6px 0}
+.panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media (max-width:720px){.panel{grid-template-columns:1fr}}
+.ctl{border-radius:14px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ctl .lbl{font-weight:700;font-size:15px}
+.ctl .val{font-size:15px}
+.ctl .step{display:flex;gap:6px}
+.ctl .step button{width:38px;height:38px;border-radius:10px;border:0;font-weight:900;font-size:16px;background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.ctl .step button:disabled{opacity:.35;cursor:default}
+.c1{background:var(--f1-soft)} .c1 .lbl{color:var(--f1)}
+.c2{background:var(--f2-soft)} .c2 .lbl{color:var(--f2)}
+.c3{background:var(--net-soft)} .c3 .lbl{color:var(--net)}
+.result{margin-top:12px;border-radius:14px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);min-height:56px}
+.result .formula{font-family:"Jua",sans-serif;font-size:24px;color:var(--net)}
+.result.ok{background:var(--ok-soft);border-color:var(--ok)}
+.result.bad{background:var(--bad-soft);border-color:var(--bad)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.score{margin-left:auto;font-size:15px;color:var(--muted)}
+.types{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.types button{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 12px;font-size:14px}
+.types button[aria-pressed="true"]{border-color:var(--net);color:var(--net);background:var(--net-soft);font-weight:700}
+.hidden{display:none!important}
+
+.lane-hit{cursor:ew-resize}
+.lane-lock{cursor:default}
+#box{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+@media (prefers-reduced-motion:reduce){#box{transition:none}html{scroll-behavior:auto}}
+
+.steps{counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px dashed var(--line)}
+.steps li:first-child{border-top:0}
+
+/* quiz */
+.q{padding:16px 0;border-top:1px dashed var(--line)}
+.q:first-of-type{border-top:0;padding-top:4px}
+.q .ask{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choice{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:8px 16px;font-weight:700}
+.choice.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.choice.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.fb{display:none;margin-top:10px;padding:12px 14px;border-radius:12px;font-size:16px}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-soft)} .fb.no{background:var(--bad-soft)}
+
+.recap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:720px){.recap{grid-template-columns:1fr}}
+.recap .card{border-radius:16px;padding:16px 18px}
+.recap .same{background:var(--f1-soft)} .recap .opp{background:var(--f2-soft)}
+.recap .card h3{margin:0 0 6px;font-size:20px}
+
+.eval{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px dashed var(--line)}
+.eval:first-of-type{border-top:0}
+.stars{display:flex;gap:2px;flex:none}
+.stars button{background:none;border:0;font-size:26px;color:var(--line);padding:0 2px;line-height:1}
+.stars button.on{color:#F2B705}
+
+footer{text-align:center;color:var(--muted);font-size:14px;padding:10px 0 30px}
+/* ---- 추가 스타일 ---- */
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.home{flex:none;text-decoration:none;font-size:14px;font-weight:700;color:var(--brand);border:1.5px solid var(--brand);border-radius:999px;padding:4px 12px}
+.home:hover{background:var(--brand);color:var(--brand-ink)}
+
+.fig{margin:0;border:1px solid var(--line);border-radius:16px;background:#FFFFFF;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fig img{display:block;max-width:100%;height:auto}
+.fig figcaption{font-size:14px;color:#5B6578;margin-top:6px;text-align:center}
+.fig.wide img{max-height:340px}
+.pair{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin:12px 0}
+@media (max-width:720px){.pair{grid-template-columns:1fr}}
+
+.case{border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:14px;background:var(--bg)}
+.case h3{margin:0 0 6px;font-size:21px}
+.case.same{border-left:6px solid var(--f1)}
+.case.opp{border-left:6px solid var(--f2)}
+.eq{display:inline-block;font-family:"Jua",sans-serif;font-size:20px;color:var(--net);background:var(--net-soft);border-radius:10px;padding:2px 12px;margin:4px 0}
+
+.def{border-radius:16px;padding:16px 18px;background:var(--net-soft);border-left:6px solid var(--net);margin:6px 0 14px;font-size:18px}
+.conds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+@media (max-width:720px){.conds{grid-template-columns:1fr}}
+.cond{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface)}
+.cond b{display:block;font-family:"Jua",sans-serif;font-weight:400;font-size:19px;color:var(--net)}
+
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media (max-width:720px){.judge{grid-template-columns:1fr}}
+.jcard{border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--bg)}
+.jcard svg{display:block;width:100%;height:auto}
+.jcard .tag{font-weight:700;color:var(--muted);font-size:14px}
+.jcard .choices{margin-top:6px}
+
+.blank{font:inherit;font-weight:700;width:8em;max-width:100%;text-align:center;border:0;border-bottom:2.5px solid var(--brand);background:transparent;color:var(--ink);padding:0 4px;margin:0 4px}
+.blank.right{border-color:var(--ok);color:var(--ok)}
+.blank.wrong{border-color:var(--bad);color:var(--bad)}
+
+.bogi{border:1.5px dashed var(--line);border-radius:14px;padding:10px 14px;margin:6px 0 10px;background:var(--bg)}
+.bogi .it{display:flex;gap:10px;align-items:flex-start;padding:4px 0}
+.pick{flex:none;width:34px;height:34px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700}
+.pick[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+
+.match{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;margin:6px 0 10px}
+.match select{font:inherit;font-size:16px;padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.match select.right{border-color:var(--ok);background:var(--ok-soft)}
+.match select.wrong{border-color:var(--bad);background:var(--bad-soft)}
+
+.recap6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:860px){.recap6{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.recap6{grid-template-columns:1fr}}
+.rc{border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:var(--bg)}
+.rc .ic{font-size:26px;line-height:1}
+.rc b{display:block;font-family:"Jua",sans-serif;font-weight:400;font-size:19px;margin:6px 0 2px}
+
+.video{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:linear-gradient(135deg,var(--f2-soft),var(--brand-soft));border-radius:18px;padding:20px}
+.video .play{flex:none;width:64px;height:64px;border-radius:50%;background:var(--f2);color:#fff;display:grid;place-items:center;font-size:26px}
+.video .txt{flex:1;min-width:200px}
+.video a.btn{text-decoration:none;display:inline-block}
+
+/* ---- 중력 차시 추가 ---- */
+.think{grid-template-columns:minmax(0,1.1fr) 1fr}
+.think .fig img{max-height:300px}
+@media (max-width:720px){.think{grid-template-columns:1fr}}
+
+.gstage{position:relative;max-width:760px;margin:10px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.gstage img{display:block;width:100%;height:auto}
+.gstage svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none}
+.gctl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media (max-width:720px){.gctl{grid-template-columns:1fr}}
+.gctl .ctl{background:var(--bg);border:1.5px solid var(--line);cursor:pointer}
+.gctl .ctl.sel{border-color:var(--f1);background:var(--f1-soft)}
+.gctl .ctl.ok{border-color:var(--ok);background:var(--ok-soft)}
+.gctl .ctl.no{border-color:var(--bad);background:var(--bad-soft)}
+.gctl .ctl .lbl{color:var(--ink)}
+
+.ex{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+@media (max-width:900px){.ex{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.ex{grid-template-columns:1fr}}
+.excard{border:1px solid var(--line);border-radius:16px;background:var(--bg);padding:10px;display:flex;flex-direction:column}
+.excard .fig{height:190px;padding:6px}
+.excard .fig img{max-height:176px;width:auto}
+.excard h3{margin:10px 2px 6px;font-size:19px}
+.excard .reveal{font-size:15px}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+@media (max-width:720px){.vs{grid-template-columns:1fr}}
+.vcol{border-radius:18px;padding:14px;border:1px solid var(--line)}
+.vcol.earth{background:var(--f2-soft)}
+.vcol.moon{background:var(--note)}
+.vcol h3{margin:0 0 8px;font-size:21px}
+.vcol .pics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vcol .fig{height:170px;padding:6px}
+.vcol .fig img{max-height:156px;width:auto}
+
+.wm{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+@media (max-width:720px){.wm{grid-template-columns:1fr}}
+.wm .card{border-radius:16px;padding:16px 18px;border:1px solid var(--line);background:var(--bg)}
+.wm .card h3{margin:0 0 8px;font-size:22px}
+.wm .card.w{border-top:6px solid var(--f1)}
+.wm .card.m{border-top:6px solid var(--f2)}
+.wm dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px}
+.wm dt{font-weight:700;color:var(--muted)}
+.wm dd{margin:0}
+
+.calc{border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:16px;background:var(--bg)}
+.calc label{font-weight:700}
+.calc input[type=range]{width:100%;accent-color:var(--brand);margin:8px 0 4px}
+.calc .mval{font-family:"Jua",sans-serif;font-size:26px;color:var(--brand)}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+@media (max-width:720px){.readout{grid-template-columns:1fr}}
+.readout>div{border-radius:14px;padding:12px 14px;background:var(--surface);border:1px solid var(--line)}
+.readout small{display:block;color:var(--muted);font-size:14px}
+.readout b{font-family:"Jua",sans-serif;font-weight:400;font-size:26px}
+.readout .e b{color:var(--f2)} .readout .mo b{color:#B8860B} .readout .ms b{color:var(--ok)}
+.bar{height:12px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .3s}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="in">
+    <div class="brandrow">
+      <div class="brand">💪 힘의 작용 연구소</div>
+      <a class="home" href="https://2026-1y-sub.vercel.app/">🏠 목록으로</a>
+    </div>
+    <nav class="chips" aria-label="학습 순서">
+      <a href="#prev">이전 내용 확인</a>
+      <a href="#goal">학습 목표</a>
+      <a href="#think">생각 깨우기</a>
+      <a href="#concept1">중력</a>
+      <a href="#lab" class="hl">해보기 ｜ 중력의 방향</a>
+      <a href="#examples">중력과 생활</a>
+      <a href="#concept2">무게와 질량</a>
+      <a href="#check">스스로 확인하기</a>
+      <a href="#more">개념 확인 문제</a>
+      <a href="#recap">배운 내용 정리</a>
+      <a href="#eval">평가 길잡이</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="crumb">5. 힘의 작용 › 여러 가지 힘 › 중력</div>
+
+  <section class="hero">
+    <h1>던진 공은 왜 다시 떨어질까?</h1>
+    <p>하늘 높이 던진 공도, 나무에서 떨어지는 사과도 결국 땅으로 떨어져요. 모든 물체를 지구 쪽으로 끌어당기는 힘, 중력에 대해 알아봐요.</p>
+    <div class="floaters" aria-hidden="true"><span>🏀</span><span>🍎</span><span>🌏</span></div>
+  </section>
+
+  <!-- 이전 내용 -->
+  <section class="sec" id="prev">
+    <span class="eyebrow">↩ 이전 내용 확인하기</span>
+    <div class="sec-head"><h2>지난 시간에 배운 합력과 힘의 평형, 기억나나요?</h2></div>
+    <div class="q">
+      <div class="ask"><span class="num">1</span><div>한 물체에 오른쪽으로 <strong>7 N</strong>, 왼쪽으로 <strong>3 N</strong>의 힘이 작용할 때 합력은?</div></div>
+      <div class="choices" data-answer="오른쪽 4 N">
+        <button class="choice">오른쪽 10 N</button><button class="choice">오른쪽 4 N</button><button class="choice">왼쪽 4 N</button>
+      </div>
+      <div class="fb" data-wrong="반대 방향이면 큰 힘에서 작은 힘을 빼고, 방향은 큰 힘의 방향이에요.">정답은 <strong>오른쪽 4 N</strong>! 7 N − 3 N = 4 N, 방향은 큰 힘의 방향이에요.</div>
+    </div>
+    <div class="q">
+      <div class="ask"><span class="num">2</span><div>한 물체에 작용하는 힘들의 합력이 0인 상태를 무엇이라고 할까?</div></div>
+      <button class="btn small" data-reveal="r-prev">정답 확인</button>
+      <div class="reveal" id="r-prev">📌 <strong>힘의 평형</strong>이에요. 오늘은 우리 주변의 여러 가지 힘 가운데 첫 번째, <strong>중력</strong>을 알아봐요.</div>
+    </div>
+  </section>
+
+  <!-- 학습 목표 -->
+  <section class="sec" id="goal">
+    <span class="eyebrow">🎯 이 단원을 배우면</span>
+    <div class="sec-head"><h2>학습 목표</h2><span class="page">교과서 160~163쪽</span></div>
+    <div class="goal"><span class="num">1</span><div><strong>중력의 크기와 방향</strong>을 설명할 수 있다.</div></div>
+    <div class="goal"><span class="num">2</span><div><strong>질량</strong>과 <strong>무게</strong>를 구별할 수 있다.</div></div>
+  </section>
+
+  <!-- 생각 깨우기 -->
+  <section class="sec" id="think">
+    <span class="eyebrow">💭 생각 깨우기</span>
+    <div class="sec-head"><h2>위로 던진 공은 어디로 갈까?</h2><span class="page">교과서 160쪽</span></div>
+    <div class="think">
+      <figure class="fig"><img src="images/basketball-throw.png" alt="두 아이가 농구공을 위로 던지고 받으려고 손을 뻗는 모습"></figure>
+      <div>
+        <p>친구에게 농구공을 위로 높이 던졌어요. 공은 계속 하늘로 올라가지 않고 다시 아래로 떨어져요. 공이 다시 떨어지는 까닭은 무엇일까?</p>
+        <button class="btn small" data-reveal="r-think">💡 생각 확인하기</button>
+        <div class="reveal" id="r-think">지구가 공을 <strong>지구 쪽으로 끌어당기기</strong> 때문이에요. 공은 위로 올라가는 동안에도 계속 이 힘을 받아서 점점 느려지다가 결국 아래로 떨어져요. 이 힘을 <strong>중력</strong>이라고 해요.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 개념 : 중력 -->
+  <section class="sec" id="concept1">
+    <span class="eyebrow">📘 교과서 개념</span>
+    <div class="sec-head"><h2>중력</h2><span class="page">교과서 160쪽</span></div>
+    <div class="def"><strong>중력</strong>은 지구가 물체를 끌어당기는 힘이다. 중력은 지구 위의 모든 물체에 작용하며, 중력의 방향은 <strong>지구 중심 방향</strong>이다.</div>
+    <p>나무에서 사과가 떨어지는 것, 위로 던진 공이 다시 떨어지는 것, 비나 눈이 땅으로 내리는 것은 모두 물체에 중력이 작용하기 때문이다. 지구는 둥글기 때문에 우리가 지구의 어느 곳에 있든 중력은 항상 지구 중심을 향한다. 그래서 지구 반대편에 사는 사람들도 땅 위에 서 있을 수 있다.</p>
+    <div class="tip">📎 우리가 서 있는 곳에서 중력의 방향은 땅에 수직인 <strong>아래 방향</strong>이에요. 이 방향을 <strong>연직 방향</strong>이라고도 해요.</div>
+  </section>
+
+  <!-- 해보기 -->
+  <section class="sec" id="lab">
+    <span class="eyebrow">🔬 해 보기</span>
+    <div class="sec-head"><h2>중력의 방향 나타내기</h2><span class="page">교과서 161쪽</span></div>
+    <p>그림은 지구의 여러 곳에 있는 사람들이다. 사과에 작용하는 중력의 방향처럼, <strong>(가)~(다)</strong>의 사람에게 작용하는 중력의 방향을 화살표로 나타내 보자.</p>
+    <p id="g-howto" style="font-size:15px;color:var(--muted)">👆 빨간 점(작용점)을 누른 채 중력이 향할 방향으로 끌어 보세요. 아래 버튼으로 화살표를 조금씩 돌릴 수도 있어요.</p>
+
+    <div class="gstage">
+      <img src="images/gravity-direction-question.png" alt="지구 둘레에 있는 사과나무, 암벽을 오르는 사람(가), 스카이다이빙하는 사람(나), 자전거를 타는 사람(다)과 사과에 작용하는 중력 화살표">
+      <svg id="gsvg" viewBox="0 0 1071 904" aria-label="중력 방향 그리기 판"></svg>
+    </div>
+
+    <div class="gctl" id="gctl"></div>
+    <div class="result" id="g-result" aria-live="polite"><span style="color:var(--muted)">세 사람 모두 화살표를 그린 뒤 「정답 확인」을 눌러요.</span></div>
+    <div class="actions">
+      <button class="btn" id="g-check">정답 확인</button>
+      <button class="btn ghost" id="g-reset">다시 하기</button>
+      <button class="btn ghost" data-reveal="r-gans">정답 그림 보기</button>
+    </div>
+    <div class="reveal" id="r-gans">
+      <figure class="fig" style="max-width:560px;margin:0 auto 10px"><img src="images/gravity-direction-answer.png" alt="(가), (나), (다) 사람에서 지구 중심을 향하는 화살표가 그려진 정답 그림"></figure>
+      (가)~(다)의 사람에게 작용하는 중력은 모두 <strong>지구 중심 방향</strong>으로 작용한다. 지구 위 어디에 있든 중력은 항상 지구 중심을 향한다.
+    </div>
+
+    <h3 style="margin:22px 0 6px;font-size:20px">📝 활동 후 설명해 보기</h3>
+    <ol class="steps">
+      <li><span class="num">1</span><div>(가)~(다)의 사람에게 작용하는 중력의 방향은 어떤 공통점이 있는지 설명해 보자.
+        <div><button class="btn ghost small" data-reveal="r-l1" style="margin-top:6px">예시 답안 보기</button></div>
+        <div class="reveal" id="r-l1">(가)~(다)의 사람에게 작용하는 중력의 방향은 모두 지구 중심 방향이다.</div></div></li>
+      <li><span class="num">2</span><div>지구 반대편에 사는 사람들이 우주로 떨어지지 않고 땅 위에서 생활할 수 있는 까닭을 설명해 보자.
+        <div><button class="btn ghost small" data-reveal="r-l2" style="margin-top:6px">예시 답안 보기</button></div>
+        <div class="reveal" id="r-l2">지구 위 어느 곳에서나 중력이 지구 중심 방향으로 작용하여 사람을 지구 쪽으로 끌어당기기 때문이다.</div></div></li>
+    </ol>
+  </section>
+
+  <!-- 중력과 생활 -->
+  <section class="sec" id="examples">
+    <span class="eyebrow">🔎 생활 속 과학</span>
+    <div class="sec-head"><h2>우리 주변에서 중력 찾기</h2><span class="page">교과서 162쪽</span></div>
+    <p>다음은 중력과 관련된 모습이다. 중력이 어떻게 작용하는지 먼저 생각해 본 뒤 설명을 열어 보자.</p>
+    <div class="ex">
+      <div class="excard">
+        <figure class="fig"><img src="images/icicles.png" alt="처마 끝에 아래로 길게 매달린 고드름"></figure>
+        <h3>🧊 고드름</h3>
+        <button class="btn ghost small" data-reveal="r-ex1">설명 보기</button>
+        <div class="reveal" id="r-ex1">녹은 물이 중력을 받아 아래로 흘러내리다가 얼기 때문에 고드름은 <strong>아래쪽</strong>으로 길게 자란다.</div>
+      </div>
+      <div class="excard">
+        <figure class="fig"><img src="images/plumb-bob.png" alt="실에 매달려 아래를 향한 다림추"></figure>
+        <h3>📐 다림추</h3>
+        <button class="btn ghost small" data-reveal="r-ex2">설명 보기</button>
+        <div class="reveal" id="r-ex2">추에 중력이 작용해 실이 항상 <strong>지구 중심 방향(연직 방향)</strong>을 가리킨다. 그래서 건물이나 기둥이 똑바로 서 있는지 확인할 때 쓴다.</div>
+      </div>
+      <div class="excard">
+        <figure class="fig"><img src="images/phone-screen-rotate.png" alt="스마트폰을 돌리자 화면 방향이 함께 바뀌는 모습"></figure>
+        <h3>📱 스마트폰 화면 회전</h3>
+        <button class="btn ghost small" data-reveal="r-ex3">설명 보기</button>
+        <div class="reveal" id="r-ex3">스마트폰 속 센서가 <strong>중력의 방향</strong>을 감지하여 기기를 돌리면 화면이 알맞은 방향으로 바뀐다.</div>
+      </div>
+      <div class="excard">
+        <figure class="fig"><img src="images/weighted-lamp.png" alt="줄 끝에 무거운 추가 달린 천장 조명"></figure>
+        <h3>💡 추가 달린 조명</h3>
+        <button class="btn ghost small" data-reveal="r-ex4">설명 보기</button>
+        <div class="reveal" id="r-ex4">줄 끝의 추에 작용하는 중력이 줄을 <strong>아래로 팽팽하게</strong> 당겨 주어, 조명을 원하는 높이에 고정할 수 있다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 무게와 질량 -->
+  <section class="sec" id="concept2">
+    <span class="eyebrow">📘 교과서 개념</span>
+    <div class="sec-head"><h2>무게와 질량</h2><span class="page">교과서 162~163쪽</span></div>
+    <p>물체에 작용하는 중력의 크기를 <strong>무게</strong>라고 한다. 무게는 힘이므로 단위로 N(뉴턴)을 사용하며, 용수철저울이나 체중계로 측정한다. 한편 <strong>질량</strong>은 물체가 가진 고유한 양으로, 측정하는 장소가 바뀌어도 변하지 않는다.</p>
+    <div class="wm">
+      <div class="card w"><h3>⚖️ 무게</h3>
+        <dl><dt>뜻</dt><dd>물체에 작용하는 <strong>중력의 크기</strong></dd>
+            <dt>단위</dt><dd>N(뉴턴)</dd>
+            <dt>측정</dt><dd>용수철저울, 체중계</dd>
+            <dt>장소</dt><dd>장소에 따라 <strong>달라진다</strong></dd></dl></div>
+      <div class="card m"><h3>🧱 질량</h3>
+        <dl><dt>뜻</dt><dd>물체가 가진 <strong>고유한 양</strong></dd>
+            <dt>단위</dt><dd>g(그램), kg(킬로그램)</dd>
+            <dt>측정</dt><dd>윗접시저울, 양팔저울</dd>
+            <dt>장소</dt><dd>장소가 바뀌어도 <strong>변하지 않는다</strong></dd></dl></div>
+    </div>
+
+    <h3 style="margin:22px 0 4px;font-size:20px">🌏 지구 vs 🌕 달</h3>
+    <p>달이 물체를 끌어당기는 힘은 지구가 끌어당기는 힘의 약 <strong>1/6</strong>이다. 그래서 같은 물체라도 달에서는 무게가 지구에서의 약 1/6로 줄어든다. 하지만 질량은 그대로이다.</p>
+    <div class="vs">
+      <div class="vcol earth"><h3>🌏 지구에서</h3>
+        <div class="pics">
+          <figure class="fig"><img src="images/lift-earth.png" alt="역기를 들어 올리느라 힘들어하는 학생"></figure>
+          <figure class="fig"><img src="images/highjump-earth.png" alt="높이뛰기 막대에 몸이 걸려 힘겹게 넘는 학생"></figure>
+        </div>
+        <p style="margin:10px 0 0">역기가 무겁고, 높이뛰기 막대를 넘기가 힘들다.</p></div>
+      <div class="vcol moon"><h3>🌕 달에서</h3>
+        <div class="pics">
+          <figure class="fig"><img src="images/lift-moon.png" alt="역기를 가볍게 머리 위로 들어 올린 학생"></figure>
+          <figure class="fig"><img src="images/highjump-moon.png" alt="높이뛰기 막대를 여유 있게 넘는 학생"></figure>
+        </div>
+        <p style="margin:10px 0 0">무게가 약 1/6이라 같은 역기도 가볍게 들고, 더 높이 뛸 수 있다.</p></div>
+    </div>
+
+    <div class="calc" id="calc">
+      <label for="mass">🧮 질량을 바꿔 보며 지구와 달에서의 무게를 비교해 보자</label>
+      <input type="range" id="mass" min="1" max="120" value="60">
+      <div>질량 <span class="mval" id="m-out">60 kg</span></div>
+      <div class="readout">
+        <div class="ms"><small>질량 (어디서나 같음)</small><b id="r-m">60 kg</b><div class="bar"><i id="b-m" style="background:var(--ok)"></i></div></div>
+        <div class="e"><small>🌏 지구에서의 무게</small><b id="r-e">588 N</b><div class="bar"><i id="b-e" style="background:var(--f2)"></i></div></div>
+        <div class="mo"><small>🌕 달에서의 무게 (약 1/6)</small><b id="r-mo">98 N</b><div class="bar"><i id="b-mo" style="background:#E0B020"></i></div></div>
+      </div>
+      <p style="font-size:14px;color:var(--muted);margin:10px 0 0">질량 1 kg인 물체의 지구에서의 무게는 약 9.8 N이에요.</p>
+    </div>
+  </section>
+
+  <!-- 스스로 확인하기 -->
+  <section class="sec" id="check">
+    <span class="eyebrow">✅ 스스로 확인하기</span>
+    <div class="sec-head"><h2>배운 내용, 확인해 볼까요?</h2><span class="page">교과서 163쪽</span></div>
+
+    <div class="q">
+      <div class="ask"><span class="num">1</span><div>문장을 완성해 보자.<br>지구가 물체를 끌어당기는 힘을 <input class="blank" data-ans="중력" aria-label="빈칸 1">(이)라고 하며, 그 방향은 <input class="blank" data-ans="지구중심|지구중심방향" aria-label="빈칸 2"> 방향이다.</div></div>
+      <button class="btn small" data-blank>정답 확인</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">2</span><div>문장을 완성해 보자.<br>물체에 작용하는 중력의 크기를 <input class="blank" data-ans="무게" aria-label="빈칸 3">(이)라 하고, 물체가 가진 고유한 양을 <input class="blank" data-ans="질량" aria-label="빈칸 4">(이)라고 한다.</div></div>
+      <button class="btn small" data-blank>정답 확인</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">3</span><div><strong>탐구 능력</strong> | 지구에서 몸무게가 600 N인 우주 비행사가 달에 갔을 때, 무게와 질량은 각각 어떻게 될지 설명해 보자.</div></div>
+      <button class="btn small" data-reveal="r-c3">예시 답안 보기</button>
+      <div class="reveal" id="r-c3">달의 중력은 지구의 약 1/6이므로 달에서의 무게는 600 N × 1/6 = <strong>약 100 N</strong>으로 줄어든다. 하지만 질량은 물체의 고유한 양이므로 달에서도 <strong>변하지 않는다</strong>.</div>
+    </div>
+  </section>
+
+  <!-- 개념 확인 문제 -->
+  <section class="sec" id="more">
+    <span class="eyebrow">✏️ 개념 확인 문제</span>
+    <div class="sec-head"><h2>조금 더 풀어볼까요?</h2><span class="page">중력 · 무게와 질량 연습 문제</span></div>
+
+    <div class="q">
+      <div class="ask"><span class="num">1</span><div>문장이 옳으면 O, 옳지 않으면 X를 선택해 보자.<br><strong>지구 반대편에 있는 사람에게는 중력이 하늘 쪽으로 작용한다.</strong></div></div>
+      <div class="choices" data-answer="X"><button class="choice">O</button><button class="choice">X</button></div>
+      <div class="fb" data-wrong="해 보기에서 (나), (다) 사람에게 그린 화살표를 떠올려 보자.">정답은 <strong>X</strong>! 지구 어디에서나 중력은 <strong>지구 중심 방향</strong>으로 작용해요.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">2</span><div>문장이 옳으면 O, 옳지 않으면 X를 선택해 보자.<br><strong>물체를 달로 가져가면 무게와 질량이 모두 1/6로 줄어든다.</strong></div></div>
+      <div class="choices" data-answer="X"><button class="choice">O</button><button class="choice">X</button></div>
+      <div class="fb" data-wrong="장소에 따라 달라지는 것과 변하지 않는 것을 구별해 보자.">정답은 <strong>X</strong>! 무게는 약 1/6로 줄지만, <strong>질량은 변하지 않아요</strong>.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">3</span><div>지구에서 무게가 <strong>120 N</strong>인 물체를 달에서 용수철저울로 측정하면 약 몇 N일까?</div></div>
+      <div class="choices" data-answer="20 N">
+        <button class="choice">720 N</button><button class="choice">120 N</button><button class="choice">20 N</button><button class="choice">0 N</button>
+      </div>
+      <div class="fb" data-wrong="달의 중력은 지구의 약 몇 분의 1인지 떠올려 보자.">정답은 <strong>20 N</strong>! 120 N × 1/6 = 20 N이에요.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">4</span><div>무게와 질량에 알맞은 것을 골라 연결하시오.</div></div>
+      <div class="match" data-match>
+        <span>(1) 무게의 단위</span>
+        <select data-ans="N(뉴턴)"><option value="">선택하기</option><option>N(뉴턴)</option><option>kg(킬로그램)</option><option>용수철저울</option><option>윗접시저울</option></select>
+        <span>(2) 질량의 단위</span>
+        <select data-ans="kg(킬로그램)"><option value="">선택하기</option><option>N(뉴턴)</option><option>kg(킬로그램)</option><option>용수철저울</option><option>윗접시저울</option></select>
+        <span>(3) 무게를 재는 도구</span>
+        <select data-ans="용수철저울"><option value="">선택하기</option><option>N(뉴턴)</option><option>kg(킬로그램)</option><option>용수철저울</option><option>윗접시저울</option></select>
+        <span>(4) 질량을 재는 도구</span>
+        <select data-ans="윗접시저울"><option value="">선택하기</option><option>N(뉴턴)</option><option>kg(킬로그램)</option><option>용수철저울</option><option>윗접시저울</option></select>
+      </div>
+      <button class="btn small" data-match-check>정답 확인</button>
+      <div class="fb" data-ok="정답! 무게는 힘이라 <strong>N</strong>과 <strong>용수철저울</strong>, 질량은 <strong>kg</strong>과 <strong>윗접시저울</strong>이에요." data-no="빨간 칸을 다시 골라 보자. 무게는 '힘', 질량은 '물체의 양'이라는 점을 떠올려요."></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">5</span><div>중력 때문에 나타나는 현상을 &lt;보기&gt;에서 모두 고르시오.</div></div>
+      <div class="bogi" data-answer="ㄱ,ㄴ,ㄹ">
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄱ">ㄱ</button><div>고드름이 아래쪽으로 자란다.</div></div>
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄴ">ㄴ</button><div>미끄럼틀을 타면 아래로 미끄러져 내려온다.</div></div>
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄷ">ㄷ</button><div>용수철을 잡아당겼다가 놓으면 원래 모양으로 돌아간다.</div></div>
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄹ">ㄹ</button><div>폭포의 물이 아래로 떨어진다.</div></div>
+      </div>
+      <button class="btn small" data-bogi-check>정답 확인</button>
+      <div class="fb" data-ok="<strong>답 ㄱ, ㄴ, ㄹ</strong> — 모두 지구가 물체를 지구 중심 쪽으로 끌어당겨 나타나는 현상이에요. ㄷ은 원래 모양으로 돌아가려는 힘(탄성력) 때문이에요." data-no="아쉬워요! 물체가 <strong>아래쪽(지구 중심 쪽)</strong>으로 움직이거나 자라는 현상을 찾아보자."></div>
+    </div>
+  </section>
+
+  <!-- 정리 -->
+  <section class="sec" id="recap">
+    <span class="eyebrow">🧠 배운 내용 정리하기</span>
+    <div class="sec-head"><h2>이 단원에서 배운 내용을 정리해 보자.</h2><span class="page">교과서 160~163쪽</span></div>
+    <div class="recap6">
+      <div class="rc"><span class="ic">🌏</span><b>중력</b>지구가 물체를 끌어당기는 힘</div>
+      <div class="rc"><span class="ic">⬇️</span><b>중력의 방향</b>지구 위 어디서나 지구 중심 방향</div>
+      <div class="rc"><span class="ic">🧊</span><b>중력과 관련된 현상</b>고드름, 다림추, 스마트폰 화면 회전, 떨어지는 공</div>
+      <div class="rc" style="border-left:5px solid var(--f1)"><span class="ic">⚖️</span><b>무게</b>중력의 크기 · 단위 N · 용수철저울 · 장소에 따라 변함</div>
+      <div class="rc" style="border-left:5px solid var(--f2)"><span class="ic">🧱</span><b>질량</b>물체의 고유한 양 · 단위 kg · 윗접시저울 · 변하지 않음</div>
+      <div class="rc"><span class="ic">🌕</span><b>달에서</b>무게는 지구의 약 1/6, 질량은 그대로</div>
+    </div>
+  </section>
+
+  <!-- 평가 길잡이 -->
+  <section class="sec" id="eval">
+    <span class="eyebrow">🌱 평가 길잡이</span>
+    <div class="sec-head"><h2>활동을 잘했는지 생각하며 체크해 보자</h2><span class="page">교과서 161쪽</span></div>
+    <div class="eval"><div>지구 위 여러 곳에 있는 사람에게 작용하는 중력의 방향을 화살표로 나타냈는가?</div><div class="stars"></div></div>
+    <div class="eval"><div>중력의 방향이 항상 지구 중심 방향이라는 것을 설명할 수 있는가?</div><div class="stars"></div></div>
+    <div class="eval"><div>무게와 질량의 차이를 설명할 수 있는가?</div><div class="stars"></div></div>
+  </section>
+
+  <footer>미래엔 중학교 과학 1 · 5단원 힘의 작용 · 수업 학습자료</footer>
+</main>
+
+<script>
+(function(){
+  /* ---------- 공통 상호작용 ---------- */
+  function showFb(fb,ok,html){fb.classList.add('show');fb.classList.toggle('ok',ok);fb.classList.toggle('no',!ok);fb.innerHTML=html;}
+  document.querySelectorAll('[data-reveal]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var el=document.getElementById(b.dataset.reveal);
+      b.setAttribute('aria-expanded',el.classList.toggle('show'));
+    });
+  });
+  document.querySelectorAll('.choices').forEach(function(g){
+    var ans=g.dataset.answer, fb=g.nextElementSibling, okHtml=fb.innerHTML;
+    var wrong=fb.dataset.wrong||'다시 생각해 보자!';
+    g.querySelectorAll('.choice').forEach(function(c){
+      c.addEventListener('click',function(){
+        g.querySelectorAll('.choice').forEach(function(x){x.classList.remove('right','wrong')});
+        var ok=c.textContent.trim()===ans;
+        c.classList.add(ok?'right':'wrong');
+        showFb(fb,ok,ok?okHtml:'🤔 '+wrong);
+      });
+    });
+  });
+  document.querySelectorAll('[data-blank]').forEach(function(b){
+    var q=b.closest('.q'), inps=q.querySelectorAll('.blank'), fb=q.querySelector('.fb');
+    function go(){
+      var all=true, empty=false;
+      inps.forEach(function(inp){
+        var v=inp.value.replace(/\s/g,''), ok=inp.dataset.ans.split('|').indexOf(v)>-1;
+        if(!v)empty=true; if(!ok)all=false;
+        inp.classList.toggle('right',ok); inp.classList.toggle('wrong',!ok);
+      });
+      showFb(fb,all,all?'정답! 🎉':(empty?'빈칸을 모두 채운 뒤 확인해 보자.':'빨간 빈칸을 다시 생각해 보자. 개념 설명을 다시 읽어 봐요.'));
+    }
+    b.addEventListener('click',go);
+    inps.forEach(function(i){i.addEventListener('keydown',function(e){if(e.key==='Enter')go();});});
+  });
+  document.querySelectorAll('[data-match-check]').forEach(function(b){
+    var q=b.closest('.q'), fb=q.querySelector('.fb');
+    b.addEventListener('click',function(){
+      var all=true;
+      q.querySelectorAll('select').forEach(function(s){var ok=s.value===s.dataset.ans;if(!ok)all=false;s.classList.toggle('right',ok);s.classList.toggle('wrong',!ok);});
+      showFb(fb,all,all?fb.dataset.ok:fb.dataset.no);
+    });
+  });
+  document.querySelectorAll('.pick').forEach(function(p){
+    p.addEventListener('click',function(){p.setAttribute('aria-pressed',p.getAttribute('aria-pressed')!=='true');});
+  });
+  document.querySelectorAll('[data-bogi-check]').forEach(function(b){
+    var q=b.closest('.q'), box=q.querySelector('.bogi'), fb=q.querySelector('.fb');
+    b.addEventListener('click',function(){
+      var sel=[].slice.call(box.querySelectorAll('.pick[aria-pressed="true"]')).map(function(p){return p.dataset.k;}).join(',');
+      if(!sel){showFb(fb,false,'보기에서 답을 먼저 골라 보자.');return;}
+      var ok=sel===box.dataset.answer; showFb(fb,ok,ok?fb.dataset.ok:fb.dataset.no);
+    });
+  });
+  document.querySelectorAll('.stars').forEach(function(s){
+    for(var i=1;i<=3;i++)(function(n){
+      var b=document.createElement('button');b.textContent='★';b.setAttribute('aria-label','별 '+n+'개');
+      b.addEventListener('click',function(){s.querySelectorAll('button').forEach(function(x,k){x.classList.toggle('on',k<n)})});
+      s.appendChild(b);
+    })(i);
+  });
+
+  /* ---------- 무게 계산기 ---------- */
+  var mass=document.getElementById('mass');
+  function calc(){
+    var m=+mass.value, e=m*9.8, mo=e/6, max=120*9.8;
+    document.getElementById('m-out').textContent=m+' kg';
+    document.getElementById('r-m').textContent=m+' kg';
+    document.getElementById('r-e').textContent=(Math.round(e*10)/10)+' N';
+    document.getElementById('r-mo').textContent='약 '+(Math.round(mo*10)/10)+' N';
+    document.getElementById('b-m').style.width=(m/120*100)+'%';
+    document.getElementById('b-e').style.width=(e/max*100)+'%';
+    document.getElementById('b-mo').style.width=(mo/max*100)+'%';
+  }
+  mass.addEventListener('input',calc); calc();
+
+  /* ---------- 중력 방향 그리기 ---------- */
+  var NS='http://www.w3.org/2000/svg', svg=document.getElementById('gsvg');
+  var C={x:528,y:494}, LEN=190, TOL=12;
+  var P=[{k:'가',x:806,y:192,a:null},{k:'나',x:203,y:758,a:null},{k:'다',x:1012,y:758,a:null}];
+  var sel=0, status=[null,null,null];
+  function el(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+  var gArr=el('g',{},svg), gCenter=el('g',{},svg), gMk=el('g',{},svg);
+  var centerDot=el('circle',{cx:C.x,cy:C.y,r:10,fill:'#1D2433',opacity:0},gCenter);
+  var centerTxt=el('text',{x:C.x,y:C.y+40,'text-anchor':'middle','font-size':30,'font-weight':700,fill:'#1D2433',opacity:0},gCenter); centerTxt.textContent='지구 중심';
+  function target(i){return Math.atan2(C.y-P[i].y,C.x-P[i].x)*180/Math.PI;}
+  function diff(a,b){var d=Math.abs(a-b)%360;return d>180?360-d:d;}
+  function draw(){
+    gArr.innerHTML=''; gMk.innerHTML='';
+    P.forEach(function(p,i){
+      if(p.a!==null){
+        var r=p.a*Math.PI/180, x2=p.x+Math.cos(r)*LEN, y2=p.y+Math.sin(r)*LEN, hx=x2-Math.cos(r)*30, hy=y2-Math.sin(r)*30;
+        var col=status[i]==='ok'?'#1E9E62':status[i]==='no'?'#D6453D':'#F07A1A';
+        el('line',{x1:p.x,y1:p.y,x2:hx,y2:hy,stroke:col,'stroke-width':12,'stroke-linecap':'round'},gArr);
+        var nx=-Math.sin(r)*16, ny=Math.cos(r)*16;
+        el('polygon',{points:x2+','+y2+' '+(hx+nx)+','+(hy+ny)+' '+(hx-nx)+','+(hy-ny),fill:col},gArr);
+      }
+      var g=el('g',{'data-i':i,style:'cursor:pointer'},gMk);
+      el('circle',{cx:p.x,cy:p.y,r:40,fill:'transparent','data-i':i},g);
+      el('circle',{cx:p.x,cy:p.y,r:20,fill:'#fff',stroke:i===sel?'#F07A1A':'#D6453D','stroke-width':i===sel?7:5,'data-i':i},g);
+      el('circle',{cx:p.x,cy:p.y,r:9,fill:'#D6453D','data-i':i},g);
+      var lx=p.x+(i===0?-58:0), ly=p.y+(i===0?-8:-50);
+      el('circle',{cx:lx,cy:ly,r:22,fill:'#2E9A8E','data-i':i},g);
+      var t=el('text',{x:lx,y:ly+9,'text-anchor':'middle','font-size':24,'font-weight':900,fill:'#fff','data-i':i},g); t.textContent=p.k;
+    });
+    renderCtl();
+  }
+  var ctl=document.getElementById('gctl');
+  function renderCtl(){
+    ctl.innerHTML='';
+    P.forEach(function(p,i){
+      var d=document.createElement('div');
+      d.className='ctl'+(i===sel?' sel':'')+(status[i]?' '+status[i]:'');
+      var st=p.a===null?'아직 안 그렸어요':(status[i]==='ok'?'⭕ 정답':status[i]==='no'?'❌ 다시':'화살표 그림');
+      d.innerHTML='<div><div class="lbl">('+p.k+') 사람</div><div class="val" style="font-size:14px;color:var(--muted)">'+st+'</div></div>'+
+        '<div class="step"><button aria-label="('+p.k+') 화살표 왼쪽으로 돌리기" data-r="-5">↺</button><button aria-label="('+p.k+') 화살표 오른쪽으로 돌리기" data-r="5">↻</button></div>';
+      d.addEventListener('click',function(e){
+        sel=i; var r=e.target.getAttribute('data-r');
+        if(r){ if(p.a===null)p.a=90; p.a=(p.a+ +r+360)%360; status[i]=null; }
+        draw();
+      });
+      ctl.appendChild(d);
+    });
+  }
+  function pt(e){var q=svg.createSVGPoint();q.x=e.clientX;q.y=e.clientY;return q.matrixTransform(svg.getScreenCTM().inverse());}
+  var dragging=false;
+  svg.addEventListener('pointerdown',function(e){
+    var i=e.target.getAttribute('data-i');
+    if(i!==null){sel=+i;}
+    dragging=true; svg.setPointerCapture(e.pointerId); aim(e); e.preventDefault();
+  });
+  svg.addEventListener('pointermove',function(e){if(dragging)aim(e);});
+  function stop(){dragging=false;}
+  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
+  function aim(e){
+    var q=pt(e), p=P[sel], dx=q.x-p.x, dy=q.y-p.y;
+    if(Math.hypot(dx,dy)<30){draw();return;}
+    p.a=Math.atan2(dy,dx)*180/Math.PI; status[sel]=null; draw();
+  }
+  var res=document.getElementById('g-result');
+  document.getElementById('g-check').addEventListener('click',function(){
+    var missing=P.filter(function(p){return p.a===null;}).map(function(p){return '('+p.k+')';});
+    if(missing.length){res.className='result';res.innerHTML='🙋 '+missing.join(', ')+' 사람의 화살표를 먼저 그려 보자.';return;}
+    var n=0;
+    P.forEach(function(p,i){var ok=diff(p.a,target(i))<=TOL;status[i]=ok?'ok':'no';if(ok)n++;});
+    centerDot.setAttribute('opacity',1); centerTxt.setAttribute('opacity',1);
+    if(n===3){res.className='result ok';res.innerHTML='<div class="formula">🎉 모두 정답!</div><div>세 사람에게 작용하는 중력은 모두 <strong>지구 중심</strong>을 향해요. 사람이 어디에 있든, 거꾸로 매달려 있든 마찬가지예요.</div>';}
+    else{res.className='result bad';res.innerHTML='🤔 '+n+'개 정답! 빨간 화살표를 다시 돌려 보자. 지구 한가운데에 표시된 <strong>지구 중심</strong>을 향하게 그려요. 사람이 서 있는 방향(머리→발)이 아니라 지구 중심이 기준이에요.';}
+    draw();
+  });
+  document.getElementById('g-reset').addEventListener('click',function(){
+    P.forEach(function(p){p.a=null;}); status=[null,null,null]; sel=0;
+    centerDot.setAttribute('opacity',0); centerTxt.setAttribute('opacity',0);
+    res.className='result'; res.innerHTML='<span style="color:var(--muted)">세 사람 모두 화살표를 그린 뒤 「정답 확인」을 눌러요.</span>';
+    draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>
